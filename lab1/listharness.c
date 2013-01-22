@@ -1,19 +1,21 @@
 #include <stdio.h>
+#include <errno.h>
+#include <list.h>
 #define MAX_CHARS 40
 
 char* readFile(const char* filename);
 
 int main (int argc, char* argv[]) {
 	if (argc != 3) {
-		printf("Error. Invalid Input.");
+		perror("Usage: ./a.out TEXTFILE COMMAND");
+		exit(-1);
 	}
 
 	char* fileContent = readFile(argv[1]);
-
+	
 	char* input = argv[2];
-
 	if (strcmp(input, "echo") == 0) {
-
+		printf("echo");
 	}
 	else if (strcmp(input, "sort") == 0) {
 		printf("sort");
@@ -24,18 +26,18 @@ int main (int argc, char* argv[]) {
 	else if (strcmp(input, "tail-remove") == 0) {
 		printf("tail-remove");
 	}
-	else{
-		printf("Invalid command supplied.");
+	else {
+		perror("Invalid command. Must be echo, sort, tail, tail-remove");
+		exit(-1);
 	}
 	
-
 	return 0;
-
 }
 
 char* readFile(const char* filename) {
+	// first pass, determine # lines
 	FILE *fp = fopen(filename, "r");
-	int lines = 0, i = 0;
+	int i = 0, lines = 0;
 	if (fp != NULL) {
 		char buffer[MAX_CHARS];
 		while (fgets(buffer, MAX_CHARS, fp) != NULL) {
@@ -44,12 +46,12 @@ char* readFile(const char* filename) {
 	}
 	fclose(fp);
 
+	// second pass, read in data
 	fp = fopen(filename, "r");
 	char fileContent[lines][MAX_CHARS];
 	if (fp != NULL) {
 		char buffer[MAX_CHARS];
 		while (fgets(buffer, MAX_CHARS, fp) != NULL) {
-			//fileContent[i] = buffer;
 			++i;
 		}
 	}
