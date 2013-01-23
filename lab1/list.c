@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "list.h"
 
 void list_init(list_t *l, 
@@ -10,6 +11,24 @@ void list_visit_items(list_t *l, void (*visitor)(void *v)) {
 }
 
 void list_insert_tail(list_t *l, void *v) {
+	// create node
+	list_item_t* tail = (list_item_t*) malloc(sizeof(list_item_t));
+	tail->datum = v;
+
+	// grab existing tail, set up pointers
+	list_item_t* node = l->tail;
+	if (node != NULL) {
+		node->next = tail;
+		tail->next = NULL;
+		tail->pred = node;
+		l->tail = tail;
+	}
+	else {
+		l->head = tail;
+		l->tail = tail;
+		tail->next = NULL;
+		tail->pred = NULL;
+	}
 }
 
 void list_insert_sorted(list_t *l, void *v) {
@@ -17,24 +36,3 @@ void list_insert_sorted(list_t *l, void *v) {
 
 void list_remove_head(list_t *l) {
 }
-
-int char_compar(const void *key, const void *with) {
-	char *pleft = (char) key;
-	char *pright = (char) with;
-
-	if (atoi(*pleft) < atoi(*pright) {
-		return -1;
-	}
-	else if (atoi(*pleft) == atoi(*pright)) {
-		return 0;
-	}
-	else {
-		return 1;
-	}
-}
-
-int main() {
-	return 0;
-}
-
-

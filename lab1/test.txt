@@ -1,4 +1,6 @@
-hey this is a test
-great
-right?
-yeah.
+is
+this
+list
+really
+sorted
+correctly
