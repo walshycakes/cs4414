@@ -8,14 +8,7 @@ void list_init(list_t *l,
 }
 
 void list_visit_items(list_t *l, void (*visitor)(void *v)) {
-	
-	list_item_t *node = l->head;
-	while(node->next != NULL){
-		visitor(node);
-		node = node->next;
-	}
 }
-
 
 void list_insert_tail(list_t *l, void *v) {
 	// create node
@@ -24,7 +17,6 @@ void list_insert_tail(list_t *l, void *v) {
 
 	// grab existing tail, set up pointers
 	list_item_t* node = l->tail;
-
 	if (node != NULL) {
 		node->next = tail;
 		tail->next = NULL;
@@ -40,30 +32,7 @@ void list_insert_tail(list_t *l, void *v) {
 }
 
 void list_insert_sorted(list_t *l, void *v) {
-	
-	
 }
-
 
 void list_remove_head(list_t *l) {
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
