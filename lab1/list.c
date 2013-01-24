@@ -8,8 +8,8 @@ void list_init(list_t *l,
 	l->head = NULL;
 	l->tail = NULL;
 	l->length = 0;
-
-	//TODO function pointers
+	l->compare = compare;
+	l->datum_delete = datum_delete;
 }
 
 void list_visit_items(list_t *l, void (*visitor)(void *v)) {
