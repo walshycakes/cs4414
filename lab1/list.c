@@ -15,38 +15,89 @@ void list_init(list_t *l,
 void list_visit_items(list_t *l, void (*visitor)(void *v)) {
 	list_item_t *node = l->head;
 	while (node->next != NULL){
-		char* datum = node->datum;
-		visitor((void*) datum);
+		visitor((void*) node);
 		node = node->next;
 	}
-	visitor((void*) node->datum);
+	visitor((void*) node);
 }
 
 void list_insert_tail(list_t *l, void *v) {
 	// create node
-	list_item_t* tail = (list_item_t*) malloc(sizeof(list_item_t));
-	tail->datum = v;
+	list_item_t* node = (list_item_t*) malloc(sizeof(list_item_t));
+	node->datum = v;
 	l->length++;
 
 	// grab existing tail, set up pointers
-	list_item_t* node = l->tail;
+	list_item_t* tail = l->tail;
 
-	if (node != NULL) {
-		node->next = tail;
-		tail->next = NULL;
-		tail->pred = node;
-		l->tail = tail;
+	if (tail != NULL) {
+		tail->next = node;
+		node->next = NULL;
+		node->pred = tail;
+		l->tail = node;
 	}
 	else {
-		l->head = tail;
-		l->tail = tail;
-		tail->next = NULL;
-		tail->pred = NULL;
+		l->head = node;
+		l->tail = node;
+		node->next = NULL;
+		node->pred = NULL;
 	}
 }
 
 void list_insert_sorted(list_t *l, void *v) {
-	// TODO use qsort and comparison function
+	/* 4 cases for insert:
+	1. insert into empty list
+	2. insert minimal element
+	3. insert maximal element
+	4. insert in middle of list
+	*/
+
+	// create node
+	list_item_t* node = (list_item_t*) malloc(sizeof(list_item_t));
+	node->datum = v;
+	l->length++;
+
+	// grab existing head, set up pointers
+	list_item_t* head = l->head;
+	if (head != NULL) {
+		// case 2
+		if (l->compare(node, head) < 0) {
+			printf("case2");
+			l->head = node;
+			node->next = head;
+			node->pred = NULL;
+			head->pred = node;
+		}
+		else {
+			while (head->next != NULL && l->compare(node, head) > 0) {
+				head = head->next;
+			}
+			// case 3
+			if (head->next == NULL && l->compare(node, head) > 0) {
+				printf("case3");
+				l->tail->next = node;
+				node->next = NULL;
+				node->pred = l->tail;
+				l->tail = node;
+			}
+			// case 4
+			else if (head->next != NULL && l->compare(node, head) < 0) {
+				printf("case4");
+				node->pred = head->pred;
+				head->pred->next = node;
+				head->pred = node;
+				node->next = head;
+			}
+		}
+	}
+	// case 1
+	else {
+		printf("case1");
+		l->head = node;
+		l->tail = node;
+		node->next = NULL;
+		node->pred = NULL;
+	}
 }
 
 void list_remove_head(list_t *l) {

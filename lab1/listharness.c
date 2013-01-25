@@ -18,7 +18,7 @@ int main (int argc, char* argv[]) {
 
 	char* filename = argv[1];
 	char* command = argv[2];
-	
+
 	list_t* theList = (list_t*) malloc(sizeof(list_t));
 	list_init(theList, compare_string, datum_delete_string);
 
@@ -35,8 +35,16 @@ int main (int argc, char* argv[]) {
 				notEcho = 1;
 				char* datum = (char*) malloc((strlen(buffer)+1) * sizeof(char));
 				strcpy(datum, buffer);
-
-				list_insert_tail(theList, (void*) datum);
+				
+				if (strcmp(command, "tail") == 0) {
+					list_insert_tail(theList, (void*) datum);
+				}
+				else if (strcmp(command, "sort") == 0) {
+					list_insert_sorted(theList, (void*) datum);
+				}
+				else {
+					printf("blargh");
+				}
 			}
 		}
 		if (notEcho) {
@@ -47,16 +55,46 @@ int main (int argc, char* argv[]) {
 	return 0;
 }
 
+// v is a list_item_t
 void visitor_string(void* v) {
-	printf("%s",(char*) v);
+	char* datum = ((list_item_t*) v)->datum;
+	printf("%s", datum);
 }
 
-int compare_string(const void *key, const void *with){
-	char* left = (char*) key;
-	char* right = (char*) with;
+// key, with are both list_item_t
+int compare_string(const void *key, const void *with) {
+	char* left = ((list_item_t*) key)->datum;
+	char* right = ((list_item_t*) with)->datum;
 	
 	return strcmp(left, right);
 }
 
+// v is a list_item_t
 void datum_delete_string(void *v) {
+	// grab the node and its adjacent nods
+	list_item_t* theNode = (list_item_t*) v;
+	list_item_t* pred = theNode->pred;
+	list_item_t* next = theNode->next;
+
+	// case pred, next is null, null
+	// no pointers need rearranging
+
+	// case pred, next is null, exists
+	if (pred == NULL && next != NULL) {
+		next->pred = theNode->pred;
+	}
+
+	// case pred, next is exists, null
+	else if (pred != NULL && next == NULL) {
+		pred->next = theNode->next;
+	}
+
+	else if (pred != NULL && next != NULL) {
+		pred->next = theNode->next;
+		next->pred = theNode->pred;
+	}
+
+	// free datum and free node
+	free(theNode->datum);
+	free(theNode);
 }

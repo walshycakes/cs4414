@@ -1,6 +1,9 @@
 # Object files
 *.o
 
+# Temp files
+*.c~
+
 # Libraries
 *.lib
 *.a
