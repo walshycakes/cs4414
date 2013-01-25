@@ -101,4 +101,5 @@ void list_remove_head(list_t *l) {
 	list_item_t* nextHead = head->next;
 	l->head = nextHead;
 	l->datum_delete(head);
+	l->length = l->length - 1;
 }

@@ -22,17 +22,16 @@ int main (int argc, char* argv[]) {
 	list_t* theList = (list_t*) malloc(sizeof(list_t));
 	list_init(theList, compare_string, datum_delete_string);
 
-	int notEcho = 0;
-
 	FILE* fp = fopen(filename, "r");
 	if (fp != NULL) {
 		char buffer[MAX_CHARS];
+
 		while (fgets(buffer, MAX_CHARS+1, fp) != NULL) {
 			if (strcmp(command, "echo") == 0) {
 				printf("%s", buffer);	
 			}
 			else {
-				notEcho = 1;
+				
 				char* datum = (char*) malloc((strlen(buffer)+1) * sizeof(char));
 				strcpy(datum, buffer);
 				
@@ -43,7 +42,7 @@ int main (int argc, char* argv[]) {
 					list_insert_sorted(theList, (void*) datum);
 				}
 				else if (strcmp(command, "tail-remove") == 0) {
-					notEcho = 0;
+				
 					list_insert_tail(theList, (void*) datum);
 				}
 				else {
@@ -52,22 +51,31 @@ int main (int argc, char* argv[]) {
 				}
 			}
 		}
-		if (notEcho) {
-			list_visit_items(theList, visitor_string);
-		}
-		else {
+		
+		if (strcmp(command, "tail-remove") == 0){
 			int i;
-			for (i = 1; i < (theList->length); ++i) {
-				if ((i % 3 == 0)) {
+			int theLength = theList->length;
+			for (i = 0; i < theLength; ++i) {
+				if (i == 0) {
+					printf("-----\tFull list\n");
+					list_visit_items(theList,visitor_string);
+				}
+				else if ((i % 3 == 0)) {
+					printf("-----\tRemoved 3\n");
 					list_visit_items(theList, visitor_string);
-					printf("----------------------------------\n");
 				}
 				list_remove_head(theList);
 			}
-			printf("The list is empty.");
+			printf("-----\tList empty\n");
 		}
-	}
 
+		else if (strcmp(command, "echo") != 0) {
+			list_visit_items(theList, visitor_string);
+			list_visit_items(theList, datum_delete_string);
+		}
+
+		free(theList);
+	}
 	return 0;
 }
 
@@ -94,7 +102,7 @@ void datum_delete_string(void *v) {
 		4. pred, next are exists, exists
 	*/
 
-	// grab the node and its adjacent nods
+	// grab the node and its adjacent nodes
 	list_item_t* theNode = (list_item_t*) v;
 	list_item_t* pred = theNode->pred;
 	list_item_t* next = theNode->next;
