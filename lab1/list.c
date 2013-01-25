@@ -46,10 +46,10 @@ void list_insert_tail(list_t *l, void *v) {
 
 void list_insert_sorted(list_t *l, void *v) {
 	/* 4 cases for insert:
-	1. insert into empty list
-	2. insert minimal element
-	3. insert maximal element
-	4. insert in middle of list
+		1. insert into empty list
+		2. insert minimal element
+		3. insert maximal element
+		4. insert in middle of list
 	*/
 
 	// create node
@@ -61,8 +61,7 @@ void list_insert_sorted(list_t *l, void *v) {
 	list_item_t* head = l->head;
 	if (head != NULL) {
 		// case 2
-		if (l->compare(node, head) < 0) {
-			printf("case2");
+		if (l->compare(node, head) <= 0) {
 			l->head = node;
 			node->next = head;
 			node->pred = NULL;
@@ -74,15 +73,13 @@ void list_insert_sorted(list_t *l, void *v) {
 			}
 			// case 3
 			if (head->next == NULL && l->compare(node, head) > 0) {
-				printf("case3");
 				l->tail->next = node;
 				node->next = NULL;
 				node->pred = l->tail;
 				l->tail = node;
 			}
 			// case 4
-			else if (head->next != NULL && l->compare(node, head) < 0) {
-				printf("case4");
+			else if (l->compare(node, head) <= 0) {
 				node->pred = head->pred;
 				head->pred->next = node;
 				head->pred = node;
@@ -92,7 +89,6 @@ void list_insert_sorted(list_t *l, void *v) {
 	}
 	// case 1
 	else {
-		printf("case1");
 		l->head = node;
 		l->tail = node;
 		node->next = NULL;
@@ -101,4 +97,8 @@ void list_insert_sorted(list_t *l, void *v) {
 }
 
 void list_remove_head(list_t *l) {
+	list_item_t* head = (list_item_t*) l->head;
+	list_item_t* nextHead = head->next;
+	l->head = nextHead;
+	l->datum_delete(head);
 }

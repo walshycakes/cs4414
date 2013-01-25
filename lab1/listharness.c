@@ -42,13 +42,29 @@ int main (int argc, char* argv[]) {
 				else if (strcmp(command, "sort") == 0) {
 					list_insert_sorted(theList, (void*) datum);
 				}
+				else if (strcmp(command, "tail-remove") == 0) {
+					notEcho = 0;
+					list_insert_tail(theList, (void*) datum);
+				}
 				else {
-					printf("blargh");
+					perror("Invalid command. Possible choices: echo tail sort tail-remove");
+					exit(-1);
 				}
 			}
 		}
 		if (notEcho) {
 			list_visit_items(theList, visitor_string);
+		}
+		else {
+			int i;
+			for (i = 1; i < (theList->length); ++i) {
+				if ((i % 3 == 0)) {
+					list_visit_items(theList, visitor_string);
+					printf("----------------------------------\n");
+				}
+				list_remove_head(theList);
+			}
+			printf("The list is empty.");
 		}
 	}
 
@@ -71,24 +87,31 @@ int compare_string(const void *key, const void *with) {
 
 // v is a list_item_t
 void datum_delete_string(void *v) {
+	/* 4 cases
+		1. pred, next are null, null (no action)
+		2. pred, next are null, exists
+		3. pred, next are exists, null
+		4. pred, next are exists, exists
+	*/
+
 	// grab the node and its adjacent nods
 	list_item_t* theNode = (list_item_t*) v;
 	list_item_t* pred = theNode->pred;
 	list_item_t* next = theNode->next;
 
-	// case pred, next is null, null
-	// no pointers need rearranging
+	// case 1 - no pointers need rearrange
 
-	// case pred, next is null, exists
+	// case 2
 	if (pred == NULL && next != NULL) {
 		next->pred = theNode->pred;
 	}
 
-	// case pred, next is exists, null
+	// case 3
 	else if (pred != NULL && next == NULL) {
 		pred->next = theNode->next;
 	}
 
+	// case 4
 	else if (pred != NULL && next != NULL) {
 		pred->next = theNode->next;
 		next->pred = theNode->pred;
