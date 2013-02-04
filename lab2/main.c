@@ -12,6 +12,9 @@ int main(int argc, char** argv) {
 
 	int is_true = 1;
 
+	printf("pid of our shell: %d\n", getpid());
+	printf("ppid of the shell (i.e. this shell): %d\n", getppid());
+
 	while (is_true) {
 		printf("$");
 		// parse input
@@ -29,7 +32,11 @@ int main(int argc, char** argv) {
 		if (strcmp(buf, "exit") == 0) {
 			is_true = 0;
 		}
-		else {
+
+	
+		else{
+			
+		
 			pid = fork();
 
 			if (pid < 0) {
@@ -37,11 +44,13 @@ int main(int argc, char** argv) {
 				return 1;
 			}
 			else if (pid == 0) { // child
-				printf("child: pid = %d\n", pid);
+				printf("[child] pid: %d\n", getpid());
+				printf("[child] parent pid: %d\n", getppid());
 				execlp(command, buf, NULL);
 			}
 			else { // parent
-				printf("parent: pid = %d\n", pid);
+				printf("[parent]: pid = %d\n", pid);
+				printf("[parent] get ppid: %d\n", getppid());
 				wait(NULL);
 			}
 		}
