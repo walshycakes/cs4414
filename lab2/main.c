@@ -3,14 +3,21 @@
 #include <sys/types.h>
 #include <string.h>
 #include <stdlib.h>
+#include <signal.h>
 
 #define MAX_LINE 80
+unsigned int is_fg = 1;
 
 char** tokenizeInput(char *buf) {
 	int n = 0;
 	char **argv = (char**) calloc(1, sizeof(char*));
 	
 	fgets(buf, MAX_LINE+1, stdin);
+
+	if(strchr(buf, '&') != NULL){
+		is_fg = 0;
+	}
+
 	char *tokens = strtok(buf, " \n");
 
 	while (tokens) {
@@ -38,6 +45,7 @@ int main(int argc, char** argv) {
 
 		if (strcmp(argvv[0], "exit") == 0) {
 			is_true = 0;
+			kill(pid, SIGTERM);
 		}
 
 	
@@ -49,17 +57,22 @@ int main(int argc, char** argv) {
 				return 1;
 			}
 			else if (pid == 0) { // child
-				// printf("[child] pid: %d\n", getpid());
+				 printf("[child] pid: %d\n", getpid());
 				// printf("[child] parent pid: %d\n", getppid());
 				execvp(argvv[0], argvv);
 			}
 			else { // parent
 				// printf("[parent]: pid = %d\n", pid);
 				// printf("[parent] get ppid: %d\n", getppid());
-				wait(NULL);
+				if(is_fg){
+					wait(NULL);
+				}
 			}
+		
+		
+		
 		}
 	}
-
+	
 	return 0;
 }
