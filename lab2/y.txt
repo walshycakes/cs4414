@@ -1,0 +1,12 @@
+b.txt
+c.txt
+e.txt
+lab2sh
+l.txt
+main.c
+main.c~
+main.o
+Makefile
+t.txt
+y.txt
+$$
