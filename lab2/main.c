@@ -8,6 +8,7 @@
 #define MAX_LINE 80
 unsigned int is_fg = 1;
 
+
 char** tokenizeInput(char *buf) {
 	int n = 0;
 	char **argv = (char**) calloc(1, sizeof(char*));
@@ -21,6 +22,22 @@ char** tokenizeInput(char *buf) {
 	char *tokens = strtok(buf, " \n");
 
 	while (tokens) {
+		
+		if (strchr(tokens, '>') != NULL) {
+			
+			tokens = strtok(NULL, " \n");
+			FILE *fp = freopen(tokens, "w", stdout);
+			
+			break;
+
+		}
+		if (strchr(tokens, '<') != NULL) {
+
+			tokens = strtok(NULL, " \n");
+			freopen(tokens, "r", stdin);
+			break;
+		}
+		
 		argv[n] = calloc(strlen(tokens), sizeof(char));
 		argv[n] = tokens;
 		++n;
@@ -57,9 +74,12 @@ int main(int argc, char** argv) {
 				return 1;
 			}
 			else if (pid == 0) { // child
-				 printf("[child] pid: %d\n", getpid());
+				// printf("[child] pid: %d\n", getpid());
 				// printf("[child] parent pid: %d\n", getppid());
+			
 				execvp(argvv[0], argvv);
+				
+				
 			}
 			else { // parent
 				// printf("[parent]: pid = %d\n", pid);
