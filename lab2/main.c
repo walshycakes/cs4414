@@ -15,24 +15,19 @@ char** tokenizeInput(char *buf) {
 	
 	fgets(buf, MAX_LINE+1, stdin);
 
-	if(strchr(buf, '&') != NULL){
+	if (strchr(buf, '&') != NULL) {
 		is_fg = 0;
 	}
 
 	char *tokens = strtok(buf, " \n");
 
 	while (tokens) {
-		
 		if (strchr(tokens, '>') != NULL) {
-			
 			tokens = strtok(NULL, " \n");
 			FILE *fp = freopen(tokens, "w", stdout);
-			
 			break;
-
 		}
 		if (strchr(tokens, '<') != NULL) {
-
 			tokens = strtok(NULL, " \n");
 			freopen(tokens, "r", stdin);
 			break;
@@ -64,8 +59,6 @@ int main(int argc, char** argv) {
 			is_true = 0;
 			kill(pid, SIGTERM);
 		}
-
-	
 		else {
 			pid = fork();
 
@@ -74,23 +67,13 @@ int main(int argc, char** argv) {
 				return 1;
 			}
 			else if (pid == 0) { // child
-				// printf("[child] pid: %d\n", getpid());
-				// printf("[child] parent pid: %d\n", getppid());
-			
 				execvp(argvv[0], argvv);
-				
-				
 			}
 			else { // parent
-				// printf("[parent]: pid = %d\n", pid);
-				// printf("[parent] get ppid: %d\n", getppid());
-				if(is_fg){
+				if (is_fg){
 					wait(NULL);
 				}
 			}
-		
-		
-		
 		}
 	}
 	
