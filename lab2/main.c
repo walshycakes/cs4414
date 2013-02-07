@@ -13,6 +13,7 @@ Submitted: 2/8/2013
 #include <string.h>
 #include <stdlib.h>
 #include <glob.h>
+#include <signal.h>
 
 /* we assume max chars entered is 80 */
 #define MAX_LINE 80
@@ -79,6 +80,7 @@ int main(int argc, char** argv) {
 		char **argvv = tokenizeInput(buf);
 
 		if (strcmp(argvv[0], "exit") == 0) {
+			kill(pid, SIGKILL);
 			exit(1);
 		}
 
@@ -92,6 +94,7 @@ int main(int argc, char** argv) {
 			// backup stdout, stdin
 			int stdin_save, stdout_save;
 
+			
 			// exec, redirecting streams as necessary
 			if (is_redirect_in) {
 				stdin_save = dup(STDIN_FILENO);
