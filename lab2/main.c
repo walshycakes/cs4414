@@ -1,11 +1,18 @@
+/*------------------------------
+CS 4414 > Lab2 > Shell
+Jared Culp (jjc4fb)
+Bryan Walsh (bpw7xx) 
+
+Submitted: 2/8/2013
+------------------------------*/
+	
+
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <string.h>
 #include <stdlib.h>
-#include <signal.h>
 #include <glob.h>
-#include <assert.h>
 
 /* we assume max chars entered is 80 */
 #define MAX_LINE 80
@@ -20,8 +27,8 @@ char *redirect_stream = NULL;
 unsigned int has_wildcard = 0;
 /* global placebolder for wildcard expression */
 char *wildcard_expr = NULL;
-
-glob_t globbuf;
+/* keep track of the number of tokens */
+unsigned int argv_count = 0;
 
 char** tokenizeInput(char *buf) {
 	char **argv = (char**) calloc(1, sizeof(char*));
@@ -51,21 +58,19 @@ char** tokenizeInput(char *buf) {
 		}
 		argv[n] = tokens;
 		++n;
-
+		
 		// reallocate first index of argv to hold another param
 		argv = (char**) realloc(argv, ((n+1) * sizeof(char*)));
 		tokens = strtok(NULL, " \n");
 	}
 
+	argv_count = n;
 	return argv;
 }
 
 int main(int argc, char** argv) {
-	// fd[0] input pipe, fd[1] output pipe
-	int fd[2];
-	pipe(fd);
-
 	pid_t pid;
+	glob_t globbuf;
 
 	while (1) {
 		printf("$");
@@ -104,8 +109,16 @@ int main(int argc, char** argv) {
 			}
 			else if (has_wildcard) {
 				// usage as detailed in `man glob`
-				glob(wildcard_expr, 0, NULL, &globbuf);
-				int match_count = globbuf.gl_pathc;
+				globbuf.gl_offs = argv_count - 1;
+
+				// the GLOB_DOOFFS allocates gl_offs for us to merge
+				glob(wildcard_expr, GLOB_DOOFFS, NULL, &globbuf);
+				
+				// merge the existing argvv array
+				int i;
+				for (i = 0; i < argv_count - 1; ++i) {
+					globbuf.gl_pathv[i] = argvv[i];
+				}
 				execvp(argvv[0], globbuf.gl_pathv);
 				exit(1);
 			}
