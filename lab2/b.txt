@@ -1,9 +1,0 @@
-b.txt
-lab2sh
-main.c
-main.c~
-main.o
-Makefile
-t.txt
-b.txt
-$
