@@ -1,7 +1,7 @@
 CC=gcc
 
-threadpkg1: threadpkg1.o
-	$(CC) -o threadpkg1 threadpkg1.o
+threadpkg1: uthread.o
+	$(CC) -o threadpkg1 uthread.o
 
 clean: 
 	-rm -f *.o *~ threadpkg1
