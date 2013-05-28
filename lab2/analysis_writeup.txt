@@ -1,0 +1,24 @@
+Bryan Walsh (bpw7xx)
+Jared Culp (jjc4fb)
+Lab #2 > C Shell
+
+#1)	 PID TTY          TIME CMD
+ 2887 pts/0    00:00:00 bash
+ 3079 pts/0    00:00:00 lab2sh
+ 3080 pts/0    00:00:01 ls
+ 3081 pts/0    00:00:00 ps
+
+
+#2) If we use our shell to open a nested copy of our shell in foreground mode there is NO risk of the two processes interfering with one another because the nested shell is the child of the first shell. It is no different than creating any other sort of process.
+
+#3) If the user tries to exit our shell while there is a background process our shell closes the most recently-opened background process
+
+#4) When we call fork() from a parent process, the child process is basically an exact copy of the parent process and shares its stack, heap, and shared memory segments with the parent.
+
+#5) An interrupt occurs, the kernel gets invoked and it makes a backup of the process's process control block which contains information about state, and memory management information. Once the process occurs, the kernel restores the state of the process control block to its original state.
+
+#6) Including the parent process, there are 16 total processes. Meaning that there are 15 children processes.
+
+#7) Ordinary pipes define a producer-consumer relationship. The producer can write to one end and the consumer can read from the other end. This communication is one directional and the ordinary pipe is destroyed after communication. An example of ordinary pipes is "ls > a.txt" entered into the command prompt.
+
+Named pipes allow for a couple things: first, they allow for bi-directional communication. They also allow for multiple programs to write to an end of a single pipe, and multiple programs can read from the other end of a single pipe. Named pipes also remain in memory until they are removed by the user. Named pipes allow for two unrelated processes to communicate with one another (not just parent-child communication, as is the case for ordinary pipes).
