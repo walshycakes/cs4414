@@ -1,0 +1,59 @@
+commit 624f94825cdcb862a09b7931d01f81ed64b215dc
+Author: softboysxp <softboysxp@gmail.com>
+Date:   Wed Feb 22 15:30:47 2012 -0500
+
+    makefile changes
+
+commit c3a552b15572335cf57bb9705388d0693ebb36ef
+Author: softboysxp <softboysxp@gmail.com>
+Date:   Wed Feb 22 15:04:41 2012 -0500
+
+    uses clang if available (go LLVM!)
+
+commit 3ecfa963600db466307c010a8ab11942be942fa5
+Author: softboysxp <softboysxp@gmail.com>
+Date:   Wed Feb 22 14:59:42 2012 -0500
+
+    Makefile fix
+
+commit 714df834191d4558eab7c2d6553d95fbd7996a29
+Author: softboysxp <softboysxp@gmail.com>
+Date:   Wed Feb 22 14:57:24 2012 -0500
+
+    refined the use of tail_thread (fixing unexpected behavior on some test cases)
+
+commit 18b1622d82d557add566df970c7b47e468b42bd7
+Author: softboysxp <softboysxp@gmail.com>
+Date:   Wed Feb 22 00:47:05 2012 -0500
+
+    better freeing algorithm
+
+commit 2e77c53db96aafb6c30383bfe083f8a787df11d0
+Author: softboysxp <softboysxp@gmail.com>
+Date:   Tue Feb 21 23:05:26 2012 -0500
+
+    minor changes, comments
+
+commit dddba67e8ff73dc7ed1a8944603d746dd9b67c18
+Author: root <root@tjeff.cs.Virginia.EDU>
+Date:   Thu Feb 9 17:59:50 2012 -0500
+
+    exit when main calls uthread_exit
+
+commit d4490e95b503ae7f0d71bbc454a705d83409e8de
+Author: softboysxp <softboysxp@gmail.com>
+Date:   Thu Feb 9 20:57:35 2012 -0500
+
+    comments
+
+commit 2408e86a8c5145c99cfcbef547366d62d3e34891
+Author: softboysxp <softboysxp@gmail.com>
+Date:   Thu Feb 9 20:33:07 2012 -0500
+
+    removed GNU-specific Makefile
+
+commit 70a172ee4d1350752ff31aecaebbac9a0b71da13
+Author: root <root@tjeff.cs.Virginia.EDU>
+Date:   Thu Feb 9 15:18:21 2012 -0500
+
+    initial import

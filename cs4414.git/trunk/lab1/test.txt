@@ -1,0 +1,6 @@
+is
+this
+list
+really
+sorted
+correctly
